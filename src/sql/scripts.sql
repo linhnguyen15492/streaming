@@ -10,3 +10,12 @@ CREATE TABLE green_trips (
 	tip_amount NUMERIC,
 	total_amount NUMERIC
 );
+
+
+CREATE TABLE processed_events_aggregated (
+    window_start TIMESTAMP,
+    PULocationID INTEGER,
+    num_trips BIGINT,
+    total_revenue DOUBLE PRECISION,
+    PRIMARY KEY (window_start, PULocationID)
+);

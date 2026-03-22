@@ -8,13 +8,20 @@ from tqdm import tqdm
 def get_data_from_url(url, columns):
     df = pd.read_parquet(url, columns=columns)
     df.fillna(0, inplace=True)
-    df.to_csv("green_tripdata.csv", index=False)
+    # print(df.dtypes)
     return df
 
 
 def transform(row: pd.Series) -> pd.Series:
     row['lpep_pickup_datetime'] = int(row['lpep_pickup_datetime'].timestamp() * 1000)
     row['lpep_dropoff_datetime'] = int(row['lpep_dropoff_datetime'].timestamp() * 1000)
+
+    return row
+
+
+def transform_ts_str(row: pd.Series) -> pd.Series:
+    row['lpep_pickup_datetime'] = str(row['lpep_pickup_datetime'])
+    row['lpep_dropoff_datetime'] = str(row['lpep_dropoff_datetime'])
 
     return row
 
@@ -35,7 +42,8 @@ def stream_data(producer: KafkaProducer, topic: str, df: pd.DataFrame) -> bool:
     count = 0
     try:
         for _, row in tqdm(df.iterrows()):
-            row = transform(row)
+            # row = transform(row)
+            row = transform_ts_str(row)
             trip = get_green_trip_from_row(row)
             producer.send(topic=topic, value=trip)
             count += 1
@@ -57,7 +65,6 @@ def main():
     kafka_server = "localhost:9092"
     topic = "green-trips"
 
-    # yellow_trip_url = "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2025-11.parquet"
     green_trip_url = "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2025-10.parquet"
 
     columns = [
