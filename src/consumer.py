@@ -28,8 +28,11 @@ def stream_consumer(consumer):
     count = 0
     for data in consumer:
         trip = data.value
-        pickup_datetime = datetime.fromtimestamp(trip.lpep_pickup_datetime / 1000)
-        dropoff_datetime = datetime.fromtimestamp(trip.lpep_dropoff_datetime / 1000)
+        # pickup_datetime = datetime.fromtimestamp(trip.lpep_pickup_datetime / 1000)
+        # dropoff_datetime = datetime.fromtimestamp(trip.lpep_dropoff_datetime / 1000)
+
+        pickup_datetime = datetime.strptime(trip.lpep_pickup_datetime, '%Y-%m-%d %H:%M:%S')
+        dropoff_datetime = datetime.strptime(trip.lpep_dropoff_datetime, '%Y-%m-%d %H:%M:%S')
 
         cursor.execute(
             """
