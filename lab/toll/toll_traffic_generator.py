@@ -5,9 +5,10 @@ from time import sleep, time, ctime
 from random import random, randint, choice
 from kafka import KafkaProducer
 
-producer = KafkaProducer(bootstrap_servers='localhost:9092')
-
+SERVER = "localhost:9092"
 TOPIC = 'toll_stream'
+
+producer = KafkaProducer(bootstrap_servers=[SERVER], topic=TOPIC)
 
 VEHICLE_TYPES = ("car", "car", "car", "car", "car", "car", "car", "car",
                  "car", "car", "car", "truck", "truck", "truck",

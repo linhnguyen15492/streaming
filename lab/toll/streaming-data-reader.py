@@ -9,14 +9,15 @@ import os, sys
 
 load_dotenv()
 
-TOPIC = 'toll_stream'
 HOST = os.getenv("PG_HOST")
 PORT = os.getenv("PG_PORT")
 DATABASE = os.getenv("PG_DATABASE")
 USERNAME = os.getenv("PG_USER")
 PASSWORD = os.getenv("PG_PASSWORD")
-
 TABLE = os.getenv("PG_TABLE")
+
+SERVER = "localhost:9092"
+TOPIC = "toll_stream"
 
 print("Connecting to the database")
 connection = None
@@ -42,7 +43,7 @@ else:
 cursor = connection.cursor()
 
 print("Connecting to Kafka")
-consumer = KafkaConsumer(TOPIC)
+consumer = KafkaConsumer(TOPIC, bootstrap_servers=[SERVER])
 print("Connected to Kafka")
 print(f"Reading messages from the topic {TOPIC}")
 

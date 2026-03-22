@@ -15,10 +15,13 @@ services:
       - PLAINTEXT://0.0.0.0:29092,OUTSIDE://0.0.0.0:9092
       - --advertise-kafka-addr
       - PLAINTEXT://redpanda:29092,OUTSIDE://localhost:9092
+      #      bổ sung địa chỉ này để có thể truy cập từ bên trong docker
+#      - PLAINTEXT://redpanda:29092,OUTSIDE://redpanda:9092
       - --pandaproxy-addr
       - PLAINTEXT://0.0.0.0:28082,OUTSIDE://0.0.0.0:8082
       - --advertise-pandaproxy-addr
       - PLAINTEXT://redpanda:28082,OUTSIDE://localhost:8082
+#      - PLAINTEXT://redpanda:28082,OUTSIDE://redpanda:8082
       - --rpc-addr
       - 0.0.0.0:33145
       - --advertise-rpc-addr
@@ -48,6 +51,8 @@ services:
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
         jobmanager.memory.process.size: 1600m
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   taskmanager:
     image: pyflink-workshop
