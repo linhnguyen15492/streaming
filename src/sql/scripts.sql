@@ -19,3 +19,32 @@ CREATE TABLE processed_events_aggregated (
     total_revenue DOUBLE PRECISION,
     PRIMARY KEY (window_start, PULocationID)
 );
+
+CREATE TABLE pulse_sessions (
+	window_start TIMESTAMP(3),
+	window_end TIMESTAMP(3),
+	PULocationID INT,
+	num_trips BIGINT,
+	total_revenue "numeric",
+	PRIMARY KEY (window_start, window_end, PULocationID)
+);
+
+
+SELECT
+	PULocationID,
+	num_trips,
+	window_start,
+	window_end,
+	(window_end - window_start) AS session_duration
+FROM
+	pulse_sessions
+ORDER BY
+	num_trips DESC;
+
+
+CREATE TABLE tip_aggregate (
+	window_start TIMESTAMP(3),
+	window_end TIMESTAMP(3),
+	total_tip "numeric",
+	PRIMARY KEY (window_start)
+);

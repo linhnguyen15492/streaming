@@ -29,9 +29,7 @@ def ride_deserializer(data):
 
 
 def ride_serializer(ride):
-    ride_dict = dataclasses.asdict(ride)
-    json_str = json.dumps(ride_dict)
-    return json_str.encode('utf-8')
+    return json.dumps(dataclasses.asdict(ride)).encode('utf-8')
 
 
 class GreenTrip:
